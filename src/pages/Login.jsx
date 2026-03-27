@@ -22,6 +22,8 @@ export default function Login() {
         </button>
         <p className="login-footer">
           Part of <a href="https://crowdshipped.dev" target="_blank" rel="noopener">crowdshipped.dev</a>
+          {' · '}
+          <a href="/privacy.html">Privacy Policy</a>
         </p>
       </div>
     </div>
