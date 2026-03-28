@@ -16,15 +16,17 @@ export default function Home() {
   const navigate = useNavigate()
   const toast = useToast()
   const [lastQuery, setLastQuery] = useState('')
+  const [lastChips, setLastChips] = useState([])
   const [results, setResults] = useState([])
   const [totalResults, setTotalResults] = useState(0)
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
-  const handleSearch = async (query) => {
+  const handleSearch = async (query, chips) => {
     setLoading(true)
     setSearched(true)
     setLastQuery(query)
+    setLastChips(chips)
     try {
       const data = await smartSearch(query)
       setResults(data.items)
@@ -37,7 +39,7 @@ export default function Home() {
   }
 
   const goToFullSearch = () => {
-    navigate(`/search?q=${encodeURIComponent(lastQuery)}`)
+    navigate(`/search?q=${encodeURIComponent(lastQuery)}`, { state: { chips: lastChips } })
   }
 
   const preview = results.slice(0, PREVIEW_LIMIT)

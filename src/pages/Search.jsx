@@ -1,21 +1,34 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { smartSearch } from '../lib/books'
 import { addBook } from '../lib/shelf'
 import { useToast } from '../components/Toast'
 import BookCard from '../components/BookCard'
 import AddBookActions from '../components/AddBookActions'
+import ChipSearch from '../components/ChipSearch'
+import { buildQuery } from '../lib/queryBuilder'
 
 export default function Search() {
   const { user } = useAuth()
   const toast = useToast()
+  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [query, setQuery] = useState(searchParams.get('q') || '')
   const [results, setResults] = useState([])
   const [totalResults, setTotalResults] = useState(0)
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
+  const [currentQuery, setCurrentQuery] = useState('')
+
+  // Restore chips from Home navigation state, or build a generic chip from URL query
+  const getInitialChips = () => {
+    if (location.state?.chips) return location.state.chips
+    const q = searchParams.get('q')
+    if (q) return [{ label: 'Search', value: q, queryKey: '', color: 'chip-search' }]
+    return []
+  }
+
+  const [initialChips] = useState(getInitialChips)
 
   const doSearch = async (q, startIndex = 0) => {
     if (!q.trim()) return
@@ -30,7 +43,7 @@ export default function Search() {
         setResults(prev => [...prev, ...data.items])
       }
       setTotalResults(data.totalItems)
-    } catch (err) {
+    } catch {
       toast.error('Search failed — try again')
     } finally {
       setLoading(false)
@@ -40,16 +53,20 @@ export default function Search() {
   useEffect(() => {
     const q = searchParams.get('q')
     if (q) {
-      setQuery(q)
+      setCurrentQuery(q)
       doSearch(q)
+    } else if (location.state?.chips?.length) {
+      const query = buildQuery(location.state.chips)
+      setCurrentQuery(query)
+      doSearch(query)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSearch = async (e) => {
-    e.preventDefault()
-    if (!query.trim()) return
+  const handleSearch = async (query) => {
     setPage(0)
     setResults([])
+    setCurrentQuery(query)
     setSearchParams({ q: query })
     doSearch(query)
   }
@@ -57,27 +74,14 @@ export default function Search() {
   const loadMore = () => {
     const nextPage = page + 1
     setPage(nextPage)
-    doSearch(query, nextPage * 20)
+    doSearch(currentQuery, nextPage * 20)
   }
 
   return (
     <div className="search-page">
       <h1>Search Books</h1>
 
-      <form onSubmit={handleSearch} className="search-form">
-        <div className="search-input-group">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by title, author, ISBN, or genre..."
-            className="search-input"
-          />
-          <button type="submit" className="btn-search" disabled={loading}>
-            {loading ? 'Searching...' : 'Search'}
-          </button>
-        </div>
-      </form>
+      <ChipSearch onSearch={handleSearch} loading={loading} initialChips={initialChips} />
 
       {totalResults > 0 && (
         <p className="results-count">{totalResults.toLocaleString()} results found</p>
@@ -102,7 +106,7 @@ export default function Search() {
           </button>
         )}
 
-        {!loading && results.length === 0 && query && (
+        {!loading && results.length === 0 && currentQuery && (
           <p className="no-results">No books found. Try a different search.</p>
         )}
       </div>

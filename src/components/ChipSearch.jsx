@@ -1,25 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
+import { FILTERS, buildQuery } from '../lib/queryBuilder'
 
-const FILTERS = [
-  { key: 'title', label: 'Title', queryKey: 'intitle', color: 'chip-title' },
-  { key: 'author', label: 'Author', queryKey: 'inauthor', color: 'chip-author' },
-  { key: 'genre', label: 'Genre', queryKey: 'subject', color: 'chip-genre' },
-  { key: 'isbn', label: 'ISBN', queryKey: 'isbn', color: 'chip-isbn' },
-]
-
-function buildQuery(chips) {
-  return chips.map(chip => {
-    if (chip.queryKey) return `${chip.queryKey}:${chip.value}`
-    // No filter: Google Books searches title, author, description by default.
-    // Also check if it looks like an ISBN (digits only).
-    const digits = chip.value.replace(/[-\s]/g, '')
-    if (/^\d{10}(\d{3})?$/.test(digits)) return `isbn:${digits}`
-    return chip.value
-  }).join('+')
-}
-
-export default function ChipSearch({ onSearch, loading }) {
-  const [chips, setChips] = useState([])
+export default function ChipSearch({ onSearch, loading, initialChips }) {
+  const [chips, setChips] = useState(initialChips || [])
   const [activeFilter, setActiveFilter] = useState(null)
   const [input, setInput] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
@@ -59,7 +42,7 @@ export default function ChipSearch({ onSearch, loading }) {
     setInput('')
     setActiveFilter(null)
     inputRef.current?.focus()
-    onSearch(buildQuery(newChips))
+    onSearch(buildQuery(newChips), newChips)
   }
 
   const removeChip = (index) => {
@@ -80,7 +63,7 @@ export default function ChipSearch({ onSearch, loading }) {
         i === editingIndex ? { ...chip, value: editValue.trim() } : chip
       )
       setChips(updated)
-      if (updated.length > 0) onSearch(buildQuery(updated))
+      if (updated.length > 0) onSearch(buildQuery(updated), updated)
     } else {
       removeChip(editingIndex)
     }
@@ -102,7 +85,7 @@ export default function ChipSearch({ onSearch, loading }) {
       if (input.trim()) {
         addChipAndSearch(input)
       } else if (chips.length > 0) {
-        onSearch(buildQuery(chips))
+        onSearch(buildQuery(chips), chips)
       }
     } else if (e.key === 'Backspace' && !input) {
       if (activeFilter) {
@@ -119,7 +102,7 @@ export default function ChipSearch({ onSearch, loading }) {
     if (input.trim()) {
       addChipAndSearch(input)
     } else if (chips.length > 0) {
-      onSearch(buildQuery(chips))
+      onSearch(buildQuery(chips), chips)
     }
   }
 
