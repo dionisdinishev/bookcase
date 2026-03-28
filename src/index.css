@@ -1603,11 +1603,11 @@ select:focus-visible {
     flex-direction: column;
   }
 
-  h1 {
+  .main-content h1 {
     font-size: 24px;
   }
 
-  h2 {
+  .main-content h2 {
     font-size: 18px;
   }
 
@@ -1661,12 +1661,9 @@ select:focus-visible {
     flex-wrap: wrap;
   }
 
-  .search-row {
-    flex-wrap: wrap;
-  }
-
-  .search-main-input {
-    min-width: 0;
+  .search-row .btn-search {
+    padding: 10px 16px;
+    font-size: 14px;
   }
 
   .chips-row {
@@ -1679,7 +1676,7 @@ select:focus-visible {
     padding: 12px 8px 80px;
   }
 
-  h1 {
+  .main-content h1 {
     font-size: 20px;
   }
 
