@@ -1,4 +1,5 @@
 import { useAuth } from '../context/AuthContext'
+import { BookOpenIcon } from '../components/Icons'
 
 export default function Login() {
   const { signInWithGoogle } = useAuth()
@@ -7,7 +8,7 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <span className="logo-icon">📚</span>
+          <span className="logo-icon"><BookOpenIcon width={48} height={48} /></span>
           <h1>Bookcase</h1>
           <p>Track your reading journey</p>
         </div>

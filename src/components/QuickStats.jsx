@@ -25,15 +25,15 @@ export default function QuickStats() {
 
       <div className="quick-stat-items">
         <div className="quick-stat-item">
-          <span className="quick-stat-number">{stats.booksRead}</span>
+          <span className="quick-stat-number" style={{ color: 'var(--green)' }}>{stats.booksRead}</span>
           <span className="quick-stat-label">Read</span>
         </div>
         <div className="quick-stat-item">
-          <span className="quick-stat-number">{stats.booksReading}</span>
+          <span className="quick-stat-number" style={{ color: 'var(--orange)' }}>{stats.booksReading}</span>
           <span className="quick-stat-label">Reading</span>
         </div>
         <div className="quick-stat-item">
-          <span className="quick-stat-number">{stats.booksWantToRead}</span>
+          <span className="quick-stat-number" style={{ color: 'var(--blue)' }}>{stats.booksWantToRead}</span>
           <span className="quick-stat-label">Want</span>
         </div>
       </div>

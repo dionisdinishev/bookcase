@@ -7,7 +7,7 @@ import { useToast } from '../components/Toast'
 import BookCard from '../components/BookCard'
 import AddBookActions from '../components/AddBookActions'
 import ChipSearch from '../components/ChipSearch'
-import { buildQuery } from '../lib/queryBuilder'
+import { buildQuery, chipsToParams, paramsToChips } from '../lib/queryBuilder'
 
 export default function Search() {
   const { user } = useAuth()
@@ -20,11 +20,11 @@ export default function Search() {
   const [currentQuery, setCurrentQuery] = useState('')
   const [hasMore, setHasMore] = useState(false)
 
-  // Restore chips from Home navigation state, or build a generic chip from URL query
+  // Restore chips from: 1) Home navigation state, 2) URL params, 3) empty
   const getInitialChips = () => {
     if (location.state?.chips) return location.state.chips
-    const q = searchParams.get('q')
-    if (q) return [{ label: 'Search', value: q, queryKey: '', color: 'chip-search' }]
+    const fromUrl = paramsToChips(searchParams)
+    if (fromUrl.length) return fromUrl
     return []
   }
 
@@ -51,23 +51,20 @@ export default function Search() {
   }
 
   useEffect(() => {
-    const q = searchParams.get('q')
-    if (q) {
+    const chips = getInitialChips()
+    if (chips.length) {
+      const q = buildQuery(chips)
       setCurrentQuery(q)
       doSearch(q)
-    } else if (location.state?.chips?.length) {
-      const query = buildQuery(location.state.chips)
-      setCurrentQuery(query)
-      doSearch(query)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSearch = async (query) => {
+  const handleSearch = async (query, chips) => {
     setPage(0)
     setResults([])
     setCurrentQuery(query)
-    setSearchParams({ q: query })
+    setSearchParams(chipsToParams(chips))
     doSearch(query)
   }
 

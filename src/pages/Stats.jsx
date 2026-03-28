@@ -27,6 +27,7 @@ export default function Stats() {
   const total = stats.totalBooks || 1
   const readPct = Math.round((stats.booksRead / total) * 100)
   const readingPct = Math.round((stats.booksReading / total) * 100)
+  const wantPct = Math.round((stats.booksWantToRead / total) * 100)
 
   return (
     <div className="stats-page">
@@ -49,6 +50,12 @@ export default function Stats() {
                 className="ring-fill ring-reading"
                 strokeDasharray={`${readingPct * 3.14} ${314 - readingPct * 3.14}`}
                 strokeDashoffset={`${-readPct * 3.14}`}
+              />
+              <circle
+                cx="60" cy="60" r="50"
+                className="ring-fill ring-want"
+                strokeDasharray={`${wantPct * 3.14} ${314 - wantPct * 3.14}`}
+                strokeDashoffset={`${-(readPct + readingPct) * 3.14}`}
               />
             </svg>
             <div className="ring-center">
