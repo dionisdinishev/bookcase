@@ -102,7 +102,8 @@ body {
 }
 
 .nav-icon {
-  display: none;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .navbar-links a:hover {
@@ -143,6 +144,43 @@ body {
 .btn-sign-out:hover {
   border-color: var(--red);
   color: var(--red);
+}
+
+/* Footer */
+.footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.footer-brand {
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.footer-sep {
+  opacity: 0.4;
+}
+
+.footer-link {
+  color: var(--accent-bright);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 0.8;
 }
 
 /* Login page */
@@ -1307,7 +1345,9 @@ body {
   color: var(--border);
   font-size: 20px;
   cursor: pointer;
-  padding: 0 2px;
+  padding: 4px 4px;
+  min-width: 32px;
+  min-height: 32px;
   transition: color 0.2s;
 }
 
@@ -1502,6 +1542,26 @@ select:focus-visible {
   .quick-stats {
     position: static;
     order: 1;
+    padding: 16px;
+  }
+
+  .quick-stats-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .quick-stat-items {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .quick-stats-detail {
+    padding: 10px 0;
+  }
+
+  .quick-stats-link {
+    margin-top: 12px;
+    padding-top: 12px;
   }
 
   .filter-buttons {
@@ -1562,13 +1622,15 @@ select:focus-visible {
 
   .navbar-links a {
     flex-direction: column;
-    padding: 8px 14px;
+    padding: 6px 8px;
     font-size: 10px;
     gap: 2px;
     border-radius: 0;
     background: none;
     min-height: 44px;
     justify-content: center;
+    flex: 1;
+    align-items: center;
   }
 
   .navbar-links a.active {
@@ -1576,9 +1638,7 @@ select:focus-visible {
   }
 
   .nav-icon {
-    display: block;
     font-size: 20px;
-    line-height: 1;
   }
 
   .nav-text {
@@ -1603,12 +1663,8 @@ select:focus-visible {
     flex-direction: column;
   }
 
-  .main-content h1 {
-    font-size: 24px;
-  }
-
-  .main-content h2 {
-    font-size: 18px;
+  .footer {
+    display: none;
   }
 
   .stats-overview {
@@ -1674,10 +1730,6 @@ select:focus-visible {
 @media (max-width: 480px) {
   .main-content {
     padding: 12px 8px 80px;
-  }
-
-  .main-content h1 {
-    font-size: 20px;
   }
 
   .stats-ring-card {

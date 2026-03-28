@@ -15,10 +15,10 @@ export default function Search() {
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [results, setResults] = useState([])
-  const [totalResults, setTotalResults] = useState(0)
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [currentQuery, setCurrentQuery] = useState('')
+  const [hasMore, setHasMore] = useState(false)
 
   // Restore chips from Home navigation state, or build a generic chip from URL query
   const getInitialChips = () => {
@@ -42,7 +42,7 @@ export default function Search() {
       } else {
         setResults(prev => [...prev, ...data.items])
       }
-      setTotalResults(data.totalItems)
+      setHasMore(data.items.length === 20)
     } catch {
       toast.error('Search failed — try again')
     } finally {
@@ -83,8 +83,8 @@ export default function Search() {
 
       <ChipSearch onSearch={handleSearch} loading={loading} initialChips={initialChips} />
 
-      {totalResults > 0 && (
-        <p className="results-count">{totalResults.toLocaleString()} results found</p>
+      {results.length > 0 && (
+        <p className="results-count">{results.length} results{hasMore ? '+' : ''}</p>
       )}
 
       <div className="search-results">
@@ -100,7 +100,7 @@ export default function Search() {
           />
         ))}
 
-        {results.length > 0 && results.length < totalResults && (
+        {hasMore && (
           <button onClick={loadMore} className="btn-load-more" disabled={loading}>
             {loading ? 'Loading...' : 'Load more results'}
           </button>

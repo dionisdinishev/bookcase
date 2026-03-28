@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav className="navbar" aria-label="Main navigation">
       <div className="navbar-brand">
-        <NavLink to="/" aria-label="Bookcase home">Bookcase</NavLink>
+        <NavLink to="/" aria-label="Bookcase home"><span className="brand-icon" aria-hidden="true">📖</span> Bookcase</NavLink>
       </div>
       <div className="navbar-links" role="navigation" aria-label="Page navigation">
         <NavLink to="/" end aria-label="Search books">

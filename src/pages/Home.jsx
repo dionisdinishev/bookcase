@@ -18,7 +18,6 @@ export default function Home() {
   const [lastQuery, setLastQuery] = useState('')
   const [lastChips, setLastChips] = useState([])
   const [results, setResults] = useState([])
-  const [totalResults, setTotalResults] = useState(0)
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
@@ -30,8 +29,7 @@ export default function Home() {
     try {
       const data = await smartSearch(query)
       setResults(data.items)
-      setTotalResults(data.totalItems)
-    } catch (err) {
+    } catch {
       toast.error('Search failed — try again')
     } finally {
       setLoading(false)
@@ -67,7 +65,7 @@ export default function Home() {
 
           {hasMore && (
             <button onClick={goToFullSearch} className="btn-see-all">
-              See all {totalResults.toLocaleString()} results →
+              See all results →
             </button>
           )}
 

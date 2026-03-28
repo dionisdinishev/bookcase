@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Search from './pages/Search'
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </main>
+      {user && <Footer />}
     </div>
   )
 }
